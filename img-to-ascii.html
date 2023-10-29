@@ -1,0 +1,62 @@
+<html>
+<head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.dom.min.js"></script>
+  <style>
+    body {
+      font-family: monospace;
+      font-size: 8px;
+    }
+    #ascii {
+      white-space: pre;
+    }
+  </style>
+</head>
+<body>
+  <div id="ascii"></div>
+  <script>
+    // The characters to use for the ASCII art
+    var chars = " .,:;i1tfLCG08@".split("");
+
+    // The image to convert
+    var img;
+
+    // The size of each pixel
+    var pixelSize = 8;
+
+    // The brightness threshold
+    var threshold = 100;
+
+    function preload() {
+      // Load the image from a URL
+      img = loadImage("[image URL]");
+    }
+
+    function setup() {
+      // Create a canvas with the same size as the image
+      createCanvas(img.width, img.height);
+      // Hide the canvas
+      noCanvas();
+      // Convert the image to grayscale
+      img.filter(GRAY);
+      // Get the ASCII art element
+      var ascii = select("#ascii");
+      // Loop through the pixels of the image
+      for (var y = 0; y < img.height; y += pixelSize) {
+        for (var x = 0; x < img.width; x += pixelSize) {
+          // Get the brightness of the pixel
+          var b = brightness(img.get(x, y));
+          // Map the brightness to a character index
+          var index = Math.floor(map(b, 0, 255, chars.length - 1, 0));
+          // Get the character from the array
+          var c = chars[index];
+          // Append the character to the ASCII art element
+          ascii.html(c, true);
+        }
+        // Add a line break after each row
+        ascii.html("<br>", true);
+      }
+    }
+  </script>
+</body>
+</html>
